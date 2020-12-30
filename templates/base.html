@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-  <title>Warbler</title>
+  <title>Recipe Aggregator</title>
 
   <link rel="stylesheet"
         href="https://unpkg.com/bootstrap/dist/css/bootstrap.css">
@@ -22,44 +22,28 @@
   <div class="container-fluid">
     <div class="navbar-header">
       <a href="/" class="navbar-brand">
-        <img src="/static/images/warbler-logo.png" alt="logo">
-        <span>Warbler</span>
+        <img src="/static/images/nav-logo.png" alt="logo">
+        <span>Recipe Aggregator</span>
       </a>
     </div>
-    <ul class="nav navbar-nav navbar-right">
-      {% if request.endpoint != None %}
+    <ul class="nav navbar-nav navbar-center">
       <li>
-        <form class="navbar-form navbar-right" action="/users">
-          <input name="q" class="form-control" placeholder="Search Warbler" id="search">
+        <form class="navbar-form navbar-center">
+          <input name="q" class="form-control" placeholder="Search Recipes" id="search">
           <button class="btn btn-default">
             <span class="fa fa-search"></span>
           </button>
         </form>
       </li>
-      {% endif %}
-      {% if not g.user %}
-      <li><a href="/signup">Sign up</a></li>
-      <li><a href="/login">Log in</a></li>
-      {% else %}
-      <li>
-        <a href="/users/{{ g.user.id }}">
-          <img src="{{ g.user.image_url }}" alt="{{ g.user.username }}">
-        </a>
-      </li>
-      <li><a href="/messages/new">New Message</a></li>
-      <li><a href="/logout">Log out</a></li>
-      {% endif %}
     </ul>
   </div>
 </nav>
-<div class="container">
-  {% for category, message in get_flashed_messages(with_categories=True) %}
-  <div class="alert alert-{{ category }}">{{ message }}</div>
-  {% endfor %}
+{% block content %}
+{% endblock %}
 
-  {% block content %}
-  {% endblock %}
 
-</div>
+<script src="https://unpkg.com/axios/dist/axios.js"></script>
+<script src="/static/app.js"></script>
+
 </body>
 </html>

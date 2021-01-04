@@ -1,8 +1,9 @@
 import os
 
-from flask import Flask, render_template, request, flash, redirect, session, g, abort
+from flask import Flask, render_template, request, flash, redirect, session, g
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
+from forms import SearchForm
 
 # from forms import UserAddForm, UserEditForm, LoginForm, MessageForm
 from models import db, connect_db, Recipe
@@ -27,6 +28,15 @@ connect_db(app)
 def homepage():
     """Show homepage:"""
     return render_template('home.html')
+
+@app.route('/search-results', methods=['GET', 'POST'])
+def get_search_results():
+
+    search_data = request.get_json()['body']['results']
+    # import pdb;
+    # pdb.set_trace()
+    return render_template('search.html', search_data=search_data)
+    
 
 # @app.before_request
 # def add_user_to_g():
@@ -115,21 +125,19 @@ def homepage():
 #     flash("You have successfully logged out.", 'success')
 #     return redirect("/login")
 
-# @app.route('/users')
-# def list_users():
-#     """Page with listing of users.
+# @app.route('/search')
+# def list_search_recipes():
 
-#     Can take a 'q' param in querystring to search by that username.
-#     """
+#     """Can take a 'search' param in querystring to search by that"""
 
-#     search = request.args.get('q')
+#     search = request.args.get('search')
 
 #     if not search:
-#         users = User.query.all()
+#         recipes = Recipe.query.all()
 #     else:
-#         users = User.query.filter(User.username.like(f"%{search}%")).all()
+#         recipes = Recipe.query.filter(Recipe.name.like(f"%{search}%")).all()
 
-#     return render_template('users/index.html', users=users)
+#     return render_template('users/index.html', recipes=recipes)
 
 # @app.route('/users/<int:user_id>')
 # def users_show(user_id):

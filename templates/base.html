@@ -8,7 +8,7 @@
   <link rel="stylesheet"
         href="https://unpkg.com/bootstrap/dist/css/bootstrap.css">
   <script src="https://unpkg.com/jquery"></script>
-  <script src="https://unpkg.com/popper"></script>
+  <!-- <script src="https://unpkg.com/popper"></script> -->
   <script src="https://unpkg.com/bootstrap"></script>
 
   <link rel="stylesheet"
@@ -28,9 +28,9 @@
     </div>
     <ul class="nav navbar-nav navbar-center">
       <li>
-        <form class="navbar-form navbar-center">
+        <form id="search-bar" class="navbar-form navbar-center" action="/search-results">
           <input name="q" class="form-control" placeholder="Search Recipes" id="search">
-          <button class="btn btn-default">
+          <button type="submit" class="btn btn-default">
             <span class="fa fa-search"></span>
           </button>
         </form>

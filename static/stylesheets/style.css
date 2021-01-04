@@ -30,6 +30,10 @@ body.error-404 {
   width: 250px;
 }
 
+#recipes-container {
+  width: min-content;
+}
+
 /* ======================= Nav */
 
 .navbar {

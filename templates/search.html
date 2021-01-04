@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+  <div id="search-recipes-container">
+    <h1>DO THESE RECIPES MATCH YOUR SEARCH?</h1>
+    <div id="search-recipes" class="grid">
+        {% for data in search_data %}
+            <div id={{data.title}}>
+                <img class="recipe-pic" src="{{data.image}}"/>
+            </div>   
+        {% endfor %}
+    </div>
+
+{% endblock %}

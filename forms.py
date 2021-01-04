@@ -5,8 +5,7 @@ from wtforms import TextAreaField
 
 class SearchForm(FlaskForm):
     """Form for searching for recipes."""
-
-    text = TextAreaField('text')
+    search = TextAreaField('Search')
 
 
 # class UserAddForm(FlaskForm):

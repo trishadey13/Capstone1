@@ -58,28 +58,3 @@ async function handleRecipe(name, image, time, clickUrl, summary, container) {
         `;
      $(`#${container}-recipes`).append(recipe);
 }
-
-$("#search-bar").on("submit", async function processSearch (evt) {
-    evt.preventDefault();
-
-    let searchTerm = $("#search").val().replace(/\s/g, "+");
-    
-    const searchResults = await axios.get(`${SPOON_API}/recipes/complexSearch?query=${searchTerm}&apiKey=${API_KEY}`);
-    
-    const response = await axios.post(`/search-results`, {
-        body: {
-            results: searchResults.data.results
-          }
-    });
-    
-    // for (let r of  searchResults.data.results) {
-    //     const recipe = await axios.get(`${SPOON_API}/recipes/${r.id}/information?apiKey=${API_KEY}`);
-    //     let name = recipe.data.title;
-    //     let time = recipe.data.readyInMinutes;
-    //     let image = recipe.data.image;
-    //     let summary = recipe.data.summary;
-    //     let clickUrl = recipe.data.spoonacularSourceUrl;
-    //     let container = "search"
-    //     handleRecipe(name, image, time, clickUrl, summary, container);
-    // }
-  });

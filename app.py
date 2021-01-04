@@ -1,5 +1,5 @@
 import os
-
+import requests
 from flask import Flask, render_template, request, flash, redirect, session, g
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
@@ -32,10 +32,16 @@ def homepage():
 @app.route('/search-results', methods=['GET', 'POST'])
 def get_search_results():
 
-    search_data = request.get_json()['body']['results']
-    # import pdb;
-    # pdb.set_trace()
-    return render_template('search.html', search_data=search_data)
+    formdata = request.form['q']
+    SPOON_API = "https://api.spoonacular.com"
+    API_KEY = "3630282f6c42420fa7099731b3f21509"
+    req_data = requests.get(f'{SPOON_API}/recipes/complexSearch?query={formdata}&apiKey={API_KEY}')
+    
+    all_results = []
+    for result in req_data.json()['results']:
+        all_results.append(requests.get(f"{SPOON_API}/recipes/{result['id']}/information?&apiKey={API_KEY}").json())
+
+    return render_template('search.html', all_results=all_results)
     
 
 # @app.before_request

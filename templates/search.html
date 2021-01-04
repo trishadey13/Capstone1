@@ -2,10 +2,12 @@
 {% block content %}
   <div id="search-recipes-container">
     <h1>DO THESE RECIPES MATCH YOUR SEARCH?</h1>
-    <div id="search-recipes" class="grid">
-        {% for data in search_data %}
-            <div id={{data.title}}>
-                <img class="recipe-pic" src="{{data.image}}"/>
+    <div id="search-recipes">
+        {% for result in all_results %}
+            <div id={{result.title}}>
+                <img class="recipe-pic" src="{{result.image}}"/>
+                <h3>{{result.title}}</h3>
+                <p>{{result.summary|safe}}</p>
             </div>   
         {% endfor %}
     </div>

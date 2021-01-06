@@ -26,18 +26,18 @@
         <span>Recipe Aggregator</span>
       </a>
     </div>
-    <ul class="nav navbar-nav navbar-center">
-      <li>
-        <form id="search-bar" class="navbar-form navbar-center" action="/search-results" method="POST">
-          <input name="q" class="form-control" placeholder="Search Recipes" id="search">
-          <button type="submit" class="btn btn-default">
-            <span class="fa fa-search"></span>
-          </button>
-        </form>
-      </li>
-    </ul>
   </div>
 </nav>
+<ul class="nav navbar-nav navbar-center">
+  <li>
+    <form id="search-bar" class="navbar-form navbar-center" action="/search-results" method="POST">
+      <input name="q" class="form-control" placeholder="Search Recipes" id="search">
+      <button type="submit" class="btn btn-default">
+        <span class="fa fa-search"></span>
+      </button>
+    </form>
+  </li>
+</ul>
 {% block content %}
 {% endblock %}
 

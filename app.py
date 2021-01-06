@@ -1,5 +1,6 @@
 import os
 import requests
+import random
 from flask import Flask, render_template, request, flash, redirect, session, g
 from flask_debugtoolbar import DebugToolbarExtension
 from sqlalchemy.exc import IntegrityError
@@ -9,6 +10,8 @@ from forms import SearchForm
 from models import db, connect_db, Recipe
 
 CURR_USER_KEY = "curr_user"
+SPOON_API = "https://api.spoonacular.com"
+API_KEY = "3630282f6c42420fa7099731b3f21509"
 
 app = Flask(__name__)
 
@@ -27,20 +30,37 @@ connect_db(app)
 @app.route('/')
 def homepage():
     """Show homepage:"""
-    return render_template('home.html')
+    OFFSET = random.randint(0, 900)
+    HEALTH_OFFSET = random.randint(0, 500)
+
+    random_recipes = requests.get(f'{SPOON_API}/recipes/complexSearch?number=5&offset={OFFSET}&apiKey={API_KEY}').json()['results']
+    popular_recipes = requests.get(f'{SPOON_API}/recipes/complexSearch?number=5&offset={OFFSET}&sort=popularity&apiKey={API_KEY}').json()['results']
+    healthy_recipes = requests.get(f'{SPOON_API}/recipes/complexSearch?number=5&offset={HEALTH_OFFSET}&sort=healthiness&apiKey={API_KEY}').json()['results']
+    
+    all_recipe_ids = ""
+    for (rand, pop, health) in zip(random_recipes, popular_recipes, healthy_recipes):
+        r_id = rand['id']
+        p_id = pop['id']
+        h_id = health['id']
+        all_recipe_ids += f'{r_id},{p_id},{h_id},'
+    
+    all_results = requests.get(f'{SPOON_API}/recipes/informationBulk?ids={all_recipe_ids}&apiKey={API_KEY}').json()
+
+    return render_template('home.html', rand_results=all_results[:5], pop_results=all_results[5:10], health_results=all_results[10:])
 
 @app.route('/search-results', methods=['GET', 'POST'])
 def get_search_results():
 
     formdata = request.form['q']
-    SPOON_API = "https://api.spoonacular.com"
-    API_KEY = "3630282f6c42420fa7099731b3f21509"
-    req_data = requests.get(f'{SPOON_API}/recipes/complexSearch?query={formdata}&apiKey={API_KEY}')
+    req_data = requests.get(f'{SPOON_API}/recipes/complexSearch?query={formdata}&apiKey={API_KEY}').json()['results']
     
-    all_results = []
-    for result in req_data.json()['results']:
-        all_results.append(requests.get(f"{SPOON_API}/recipes/{result['id']}/information?&apiKey={API_KEY}").json())
+    all_recipe_ids = ""
+    for result in req_data:
+        r_id = result['id']
+        all_recipe_ids += f'{r_id},'
 
+    all_results = requests.get(f"{SPOON_API}/recipes/informationBulk?ids={all_recipe_ids}&apiKey={API_KEY}").json()
+    
     return render_template('search.html', all_results=all_results)
     
 

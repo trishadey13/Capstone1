@@ -1,7 +1,27 @@
 {% extends 'base.html' %}
 {% block content %}
+  <h1>DO THESE RECIPES MATCH YOUR SEARCH?</h1>
   <div id="search-recipes-container">
-    <h1>DO THESE RECIPES MATCH YOUR SEARCH?</h1>
+    
+
+
+
+    <div id="filter">
+        <h2>Cuisine</h2>
+        <form>
+            <input type="checkbox" id="cuisine1" name="cuisine1" value="American">
+            <label for="cuisine1"> American</label><br>
+            <input type="checkbox" id="cuisine2" name="cuisine2" value="Mediterranean">
+            <label for="cuisine2"> Mediterranean</label><br>
+            <input type="checkbox" id="cuisine3" name="cuisine3" value="Chinese">
+            <label for="cuisine3"> Chinese</label><br><br>
+            <input type="submit" value="Update Search">
+        </form>
+    </div>
+
+    
+      
+    
     <div id="search-recipes">
         {% for result in all_results %}
             <div id={{result.title}}>

@@ -34,6 +34,10 @@ body.error-404 {
   width: min-content;
 }
 
+#search-recipes-container {
+  display: flex;
+}
+
 /* ======================= Nav */
 
 .navbar {
@@ -91,19 +95,20 @@ nav form.navbar-form {
   border-radius: 20px;
   margin-bottom: 0;
   width: 100%;
-  font-size: 13px;
-  padding-right: 28px;
+  padding-right: 280px;
   box-sizing: border-box;
 }
 
 #search.form-control + .btn {
-  position: absolute;
-  right: 9px;
-  top: 2px;
-  bottom: 4px;
+  right: 30px;
+  position: relative;
   z-index: 1;
   padding: 0;
   color: #66757f;
+}
+
+#search-bar {
+  display: flex;
 }
 
 #search.form-control + .btn:active,

@@ -1,12 +1,22 @@
 {% extends 'base.html' %}
 {% block content %}
-  <div id="recipes-container">
+  <div class="recipes-container">
     <h1>RANDOM RECIPES</h1>
     <div id="random-recipes" class="grid">
       {% for recipe in rand_results %}
         <div>
-          <a href="{{recipe.spoonacularSourceUrl}}"> <img class="recipe-pic" src="{{recipe.image}}"/></a>
-          <h3>{{recipe.title}}</h3>
+          <img class="recipe-pic" src="{{recipe.image}}"/>
+          <div>
+            <a href="{{recipe.spoonacularSourceUrl}}"> <h3>{{recipe.title}}</h3></a>
+            {% if g.user %}
+              {% if recipe.id in likes %}
+                <a class="heart" id="{{recipe.id}}"><i class="fas fa-heart fa-2x "></i></a>
+              {% else %}
+                <a class="heart" id="{{recipe.id}}"><i class="far fa-heart fa-2x "></i></a>
+              {% endif %}
+            {% endif %}
+          </div>
+          <a class="nutrition {{recipe.id}}" onclick='seeNutrition(this)'>See Nutrition</a>
           <p>Cook Time: {{recipe.readyInMinutes}} minutes</p>
         </div>
       {% endfor %}
@@ -16,8 +26,18 @@
     <div id="popular-recipes" class="grid">
       {% for recipe in pop_results %}
         <div>
-          <a href="{{recipe.spoonacularSourceUrl}}"> <img class="recipe-pic" src="{{recipe.image}}"/></a>
-          <h3>{{recipe.title}}</h3>
+          <img class="recipe-pic" src="{{recipe.image}}"/>
+          <div>
+            <a href="{{recipe.spoonacularSourceUrl}}"> <h3>{{recipe.title}}</h3></a>
+            {% if g.user %}
+              {% if recipe.id in likes %}
+                <a class="heart" id="{{recipe.id}}"><i class="fas fa-heart fa-2x "></i></a>
+              {% else %}
+                <a class="heart" id="{{recipe.id}}"><i class="far fa-heart fa-2x "></i></a>
+              {% endif %}
+            {% endif %}
+          </div>
+          <a class="nutrition {{recipe.id}}" onclick='seeNutrition(this)'>See Nutrition</a>
           <p>Cook Time: {{recipe.readyInMinutes}} minutes</p>
         </div>
       {% endfor %}
@@ -27,12 +47,31 @@
     <div id="healthy-recipes" class="grid">
       {% for recipe in health_results %}
         <div>
-          <a href="{{recipe.spoonacularSourceUrl}}"> <img class="recipe-pic" src="{{recipe.image}}"/></a>
-          <h3>{{recipe.title}}</h3>
+          <img class="recipe-pic" src="{{recipe.image}}"/>
+          <div>
+            <a href="{{recipe.spoonacularSourceUrl}}"> <h3>{{recipe.title}}</h3></a>
+            {% if g.user %}
+              {% if recipe.id in likes %}
+                <a class="heart" id="{{recipe.id}}"><i class="fas fa-heart fa-2x "></i></a>
+              {% else %}
+                <a class="heart" id="{{recipe.id}}"><i class="far fa-heart fa-2x "></i></a>
+              {% endif %}
+            {% endif %}
+          </div>
+          <a class="nutrition {{recipe.id}}" onclick='seeNutrition(this)'>See Nutrition</a>
           <p>Cook Time: {{recipe.readyInMinutes}} minutes</p>
         </div>
       {% endfor %}
     </div>
     
+    <!-- Nutrition Modal -->
+    <div id="nutritionModalHome" class="modal">
+      <div class="modal-content">
+        <span class="close">&times;</span>
+        <div class="nutritionInfoHere"></div>
+      </div>
+    </div>
+
+
   </div>
 {% endblock %}

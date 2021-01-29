@@ -1,35 +1,39 @@
+
 {% extends 'base.html' %}
 {% block content %}
-  <h1>DO THESE RECIPES MATCH YOUR SEARCH?</h1>
-  <div id="search-recipes-container">
-    
-
-
-
-    <div id="filter">
-        <h2>Cuisine</h2>
-        <form>
-            <input type="checkbox" id="cuisine1" name="cuisine1" value="American">
-            <label for="cuisine1"> American</label><br>
-            <input type="checkbox" id="cuisine2" name="cuisine2" value="Mediterranean">
-            <label for="cuisine2"> Mediterranean</label><br>
-            <input type="checkbox" id="cuisine3" name="cuisine3" value="Chinese">
-            <label for="cuisine3"> Chinese</label><br><br>
-            <input type="submit" value="Update Search">
-        </form>
-    </div>
-
-    
-      
-    
+  
+  <div class="recipes-container">
+       
     <div id="search-recipes">
-        {% for result in all_results %}
-            <div id={{result.title}}>
-                <img class="recipe-pic" src="{{result.image}}"/>
-                <h3>{{result.title}}</h3>
-                <p>{{result.summary|safe}}</p>
-            </div>   
-        {% endfor %}
+        {% if no_results %}
+            <h1>{{no_results}}</h1>
+        {% else %}
+            {% for result in all_results %}
+                <div id={{result.title}}>
+                    <img class="recipe-pic" src="{{result.image}}"/>
+                    <div>
+                        <a href="{{result.sourceUrl}}"> <h3>{{result.title}}</h3></a>
+                        {% if g.user %}
+                            {% if result.id in likes %}
+                                <a class="heart" id="{{result.id}}"><i class="fas fa-heart fa-2x "></i></a>
+                            {% else %}
+                                <a class="heart" id="{{result.id}}"><i class="far fa-heart fa-2x "></i></a>
+                            {% endif %}
+                        {% endif %}
+                    </div>
+                    <a class="nutrition {{result.id}}" onclick='seeNutrition(this)'>See Nutrition</a>
+                    <p>{{result.summary|safe}}</p>
+                </div>   
+            {% endfor %}
+        {% endif %}
     </div>
+
+    <!-- Nutrition Modal -->
+    <div id="nutritionModalSearch" class="modal">
+        <div class="modal-content">
+          <span class="close">&times;</span>
+          <div class="nutritionInfoHere"></div>
+        </div>
+      </div>
 
 {% endblock %}

@@ -1,59 +1,52 @@
-// const BASE_URL = "";
-// const SPOON_API = "https://api.spoonacular.com"
-// const API_KEY = "3630282f6c42420fa7099731b3f21509"
+const SPOON_API = "https://api.spoonacular.com"
+const API_KEY = "3630282f6c42420fa7099731b3f21509"
 
-// getHomePageElem();
+async function seeNutrition() {
+    const nutritionModal = document.getElementsByClassName("modal")[0];
+    const nutritionInfo = document.getElementsByClassName("nutritionInfoHere")[0];
 
-// async function getHomePageElem () {
+    const recipeId = window.event.target.classList[1];
+    const recipeNutrition = await axios.get(`${SPOON_API}/recipes/${recipeId}/nutritionWidget?apiKey=${API_KEY}&defaultCss=true`);
+    
+    $('.nutritionInfoHere').append(recipeNutrition.data);
+    nutritionModal.style.display = "block";
 
-//     const randomRecipes = await axios.get(`${SPOON_API}/recipes/complexSearch?number=100&apiKey=${API_KEY}`);
-//     for (let r=0; r<5; r++) {
-//         randNum = Math.floor(Math.random() * 100);
-//         let randRecipeId = randomRecipes.data.results[randNum].id;
-//         const randRecipe = await axios.get(`${SPOON_API}/recipes/${randRecipeId}/information?apiKey=${API_KEY}`);
-//         let name = randRecipe.data.title;
-//         let image = randRecipe.data.image;
-//         let time = randRecipe.data.readyInMinutes;
-//         let clickUrl = randRecipe.data.spoonacularSourceUrl;
-//         let container = "random"
-//         handleRecipe(name, image, time, clickUrl, container);
-//     }
+    // close modal if X is clicked
+    $(".close").on("click", function (evt) {
+        nutritionModal.style.display = "none";
+        nutritionInfo.innerHTML = '';
+    })
 
-//     const popularRecipes = await axios.get(`${SPOON_API}/recipes/complexSearch?sort=popularity&number=100&apiKey=${API_KEY}`);
-//     for (let r=0; r<5; r++) {
-//         let randNum = Math.floor(Math.random() * 100);
-//         let randRecipeId = popularRecipes.data.results[randNum].id;
-//         const randRecipe = await axios.get(`${SPOON_API}/recipes/${randRecipeId}/information?apiKey=${API_KEY}`);
-//         let name = randRecipe.data.title;
-//         let image = randRecipe.data.image;
-//         let time = randRecipe.data.readyInMinutes;
-//         let clickUrl = randRecipe.data.spoonacularSourceUrl;
-//         let container = "popular"
-//         handleRecipe(name, image, time, clickUrl, container);
-//     }
+    // close modal if clicked outside of modal
+    window.onclick = function(evt) {
+        if (evt.target == nutritionModal) {
+            nutritionModal.style.display = "none";
+            nutritionInfo.innerHTML = '';
+        }
+    }
+}
 
-//     const healthyRecipes = await axios.get(`${SPOON_API}/recipes/complexSearch?sort=healthiness&number=100&apiKey=${API_KEY}`);
-//     for (let r=0; r<5; r++) {
-//         let randNum = Math.floor(Math.random() * 100);
-//         let randRecipeId = healthyRecipes.data.results[randNum].id;
-//         const randRecipe = await axios.get(`${SPOON_API}/recipes/${randRecipeId}/information?apiKey=${API_KEY}`);
-//         let name = randRecipe.data.title;
-//         let image = randRecipe.data.image;
-//         let time = randRecipe.data.readyInMinutes;
-//         let clickUrl = randRecipe.data.spoonacularSourceUrl;
-//         let container = "healthy"
-//         handleRecipe(name, image, time, clickUrl, container);
-//     }
+$('.heart').on('click', async function(evt) {
+    evt.preventDefault();
 
-//   }
+    recipeHeart = evt.target;
+    recipeId = recipeHeart.parentElement.id;
+    liked = true;
 
-// async function handleRecipe(name, image, time, clickUrl, container) {
-//     let recipe = `
-//             <div id="${name}">
-//                 <a href="${clickUrl}"> <img class="recipe-pic" src="${image}"/></a>
-//                 <h3>${name}</h3>
-//                 <p>Cook Time: ${time} minutes</p>
-//             </div>
-//         `;
-//      $(`#${container}-recipes`).append(recipe);
-// }
+    if (recipeHeart.classList.contains('far')) {   
+        recipeHeart.classList.remove('far'); //not liked
+        recipeHeart.classList.add('fas'); //like
+    } else {
+        liked = false;
+        recipeHeart.classList.remove('fas'); //liked
+        recipeHeart.classList.add('far'); //not like
+    }
+    
+    const response = await axios.post('/like', {
+        body: {
+            recipeId: recipeId,
+            liked: liked
+          }
+    });
+    
+})

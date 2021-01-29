@@ -8,8 +8,8 @@
   <link rel="stylesheet"
         href="https://unpkg.com/bootstrap/dist/css/bootstrap.css">
   <script src="https://unpkg.com/jquery"></script>
-  <!-- <script src="https://unpkg.com/popper"></script> -->
   <script src="https://unpkg.com/bootstrap"></script>
+  <script src="https://canvasjs.com/assets/script/canvasjs.min.js"></script>
 
   <link rel="stylesheet"
         href="https://use.fontawesome.com/releases/v5.3.1/css/all.css">
@@ -27,19 +27,105 @@
       </a>
     </div>
   </div>
+  <div class="nav-right-container">
+    {% if not g.user %}
+      <div class="nav-right">
+        <p class="sign-up-user"><a href="/signup">Sign up</a></p>
+        <p class="log-in-out"><a href="/login">Log in</a></p>
+      </div>
+    {% else %}
+      <div class="nav-right-user">
+        <p class="sign-up-user">
+          <a href="/users/{{ g.user.id }}">
+            <img class="thumbnail" src="{{ g.user.image_url }}" alt="{{ g.user.username }}">
+            <span class="username">{{ g.user.username }}</span>
+          </a>
+        </p>
+        <p class="log-in-out"><a href="/logout">Log out</a></p>
+      </div>
+      
+    {% endif %}
+  </div>
 </nav>
-<ul class="nav navbar-nav navbar-center">
-  <li>
-    <form id="search-bar" class="navbar-form navbar-center" action="/search-results" method="POST">
-      <input name="q" class="form-control" placeholder="Search Recipes" id="search">
-      <button type="submit" class="btn btn-default">
-        <span class="fa fa-search"></span>
-      </button>
-    </form>
-  </li>
-</ul>
-{% block content %}
+
+{% for category, message in get_flashed_messages(with_categories=True) %}
+  <div class="alert alert-{{ category }}">{{ message }}</div>
+{% endfor %}
+
+{% block searching %}
+  <ul class="nav navbar-nav navbar-center">
+    <li>
+      <form id="search-bar" class="navbar-form navbar-center" action="/search-results" method="POST">
+        <input name="q" class="form-control" placeholder="Search Recipes" id="search">
+        <button type="submit" class="btn btn-default">
+          <span class="fa fa-search"></span>
+        </button>
+      </form>
+    </li>
+  </ul>
 {% endblock %}
+
+{% block filter %}
+  <div class="homepage-container">
+    <div class="filter-column" id="filter">
+      <form action="/search-results-filter" method="POST">
+          <h2>Cuisine</h2>
+          <select name="cuisine" id="cuisine">
+              <option disabled selected value> -- select an option -- </option>
+              <option value='African'>African</option>
+              <option value='American'>American</option>
+              <option value='Cajun'>Cajun</option>
+              <option value='Caribbean'>Caribbean</option>
+              <option value='Chinese'>Chinese</option>
+              <option value='French'>French</option>
+              <option value='German'>German</option>
+              <option value='Greek'>Greek</option>
+              <option value='Indian'>Indian</option>
+              <option value='Irish'>Irish</option>
+              <option value='Italian'>Italian</option>
+              <option value='Japanese'>Japanese</option>
+              <option value='Korean'>Korean</option>
+              <option value='Latin American'>Latin American</option>
+              <option value='Mediterranean'>Mediterranean</option>
+              <option value='Mexican'>Mexican</option>
+              <option value='Middle Eastern'>Middle Eastern</option>
+              <option value='Southern'>Southern</option>
+              <option value='Spanish'>Spanish</option>
+              <option value='Thai'>Thai</option>
+              <option value='Vietnamese'>Vietnamese</option>
+          </select>
+
+          <h2>Dish Type</h2>
+          <select name="type" id="type">
+              <option disabled selected value> -- select an option -- </option>
+              <option value='main course'>main course</option>
+              <option value='side dish'>side dish</option>
+              <option value='dessert'>dessert</option>
+              <option value='appetizer'>appetizer</option>
+              <option value='salad'>salad</option>
+              <option value='bread'>bread</option>
+              <option value='breakfast'>breakfast</option>
+              <option value='soup'>soup</option>
+              <option value='beverage'>beverage</option>
+              <option value='sauce'>sauce</option>
+              <option value='marinade'>marinade</option>
+              <option value='fingerfood'>fingerfood</option>
+              <option value='snack'>snack</option>
+              <option value='drink'>drink</option>
+          </select>
+
+          <h2>Search by Ingredients</h2>
+          <textarea id="ingredients" name="ingredients" rows="4" cols="25" placeholder="List ingredients separated by a comma!"></textarea>
+          
+          <button type="submit" class="btn btn-default">Update Search</button>
+      </form>
+    </div>
+  {% endblock %}
+
+  {% block content %}
+  {% endblock %}
+</div>
+  
 
 
 <script src="https://unpkg.com/axios/dist/axios.js"></script>
